@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GroceryList</string>
     <string name="action_settings">Settings</string>
-    <string name="nick_string">NickW</string>
+    <string name="nick_string">Nick</string>
     <string name="michael_string">Michael</string>
+    <string name="matt_string">Matt</string>
 </resources>
