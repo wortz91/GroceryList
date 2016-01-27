@@ -32,4 +32,12 @@
         android:text="@string/michael_string"
         android:id="@+id/michaelView"
         android:layout_below="@+id/nickView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/matt_string"
+        android:id="@+id/textView"
+        android:layout_below="@+id/michaelView"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
