@@ -4,4 +4,6 @@
     <string name="nick_string">Nick</string>
     <string name="michael_string">Michael</string>
     <string name="matt_string">Matt</string>
+    <string name="fab1">fab1</string>
+    <string name="fab2">fab2</string>
 </resources>
