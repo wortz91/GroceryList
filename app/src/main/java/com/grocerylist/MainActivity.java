@@ -1,5 +1,6 @@
 package com.grocerylist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         //FloatingActionButton Setup
         FloatingActionsMenu fabMenu = (FloatingActionsMenu) findViewById(R.id.fab);
 
-
         FloatingActionButton fab1 = new FloatingActionButton(this);
 
         fab1.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action 1", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent addToCart = new Intent(getApplicationContext(), AddActivity.class);
+                startActivity(addToCart);
             }
         });
 
@@ -96,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
         fabMenu.addButton(fab1);
         fabMenu.addButton(fab2);
+
+        EditText category = (EditText) findViewById(R.id.add_field);
 
 //        //Expandable List Setup
 //        // ListView Group click listener
@@ -170,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id==R.id.overflowItem1) {
             return true;
         }
 
