@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // 2. set layoutManger
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // 3. create an adapter
-        MyAdapter mAdapter = new MyAdapter(itemsData);
+        MyAdapter mAdapter = new MyAdapter(getApplicationContext(), itemsData);
         // 4. set adapter
         recyclerView.setAdapter(mAdapter);
         // 5. set item animator to DefaultAnimator
@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
         fabMenu.addButton(fab1);
         fabMenu.addButton(fab2);
-
-        EditText category = (EditText) findViewById(R.id.add_field);
 
 //        //Expandable List Setup
 //        // ListView Group click listener
