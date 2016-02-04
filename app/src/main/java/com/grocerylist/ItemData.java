@@ -2,6 +2,8 @@ package com.grocerylist;
 
 /**
  * Created by Nicholas on 2/1/2016.
+ *
+ * this will contain the information parsed from the database
  */
 public class ItemData {
 
