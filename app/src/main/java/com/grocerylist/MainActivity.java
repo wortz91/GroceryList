@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         // this is data from recycler view
-        // JSON Data Eventually
+        // JSON Data Eventually will be retrieved here
         ArrayList<ItemData> itemsData = new ArrayList();
             itemsData.add(new ItemData("Produce"));
             itemsData.add(new ItemData("Meat"));
