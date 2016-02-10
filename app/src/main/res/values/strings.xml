@@ -9,34 +9,10 @@
     <string name="fab2">fab2</string>
     <string name="title_activity_add">AddActivity</string>
     <string name="title_activity_edit">EditActivity</string>
-    <string name="input_item_name_string">Input Item Name</string>
-    <string name="input_size_weight_string">Input Size / Weight (Optional)</string>
-    <string name="input_brand_string">Input Brand (Optional)</string>
-    <string name="add_string">Add</string>
-    <string name="cancel_string">Cancel</string>
-    <string name="select_a_category_string">Select a Category:</string>
-    <string name="large_text">large</string>
-
-    <!--Category String Array -->
-    <string-array name="category_array">
-        <item>Produce</item>
-        <item>Dairy</item>
-        <item>Dry Goods</item>
-        <item>Meat</item>
-        <item>Beer</item>
-    </string-array>
-
-    <!-- Strings related to add to list -->
-    <string name="select_an_item_name_string">Select an Item Name:</string>
-    <string name="select_a_brand_string">Select a Brand (Optional):</string>
-    <string name="select_a_size_weight_string">Select a Size / Weight (Optional):</string>
-    <string name="input_quantity_string">Input Quantity</string>
-    <string name="input_notes_string">Input Notes</string>
-    <string name="title_activity_add_to_list">AddToListActivity</string>
-
-    <!-- Strings related to Login -->
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="login_string">Login</string>
-    <string name="enter_user_name_string">Enter User Name</string>
-    <string name="enter_password_string">Enter Password</string>
+    <string name="large_text">
+        "Amount\n"
+        "Quantity here\n\n\n\n\n"
+        "Notes\n"
+        "..."
+    </string>
 </resources>
