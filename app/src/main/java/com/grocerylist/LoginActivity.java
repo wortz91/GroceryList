@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 //check user name and password
                 break;
             case R.id.cancelButton:
+                //go to login
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
     }
