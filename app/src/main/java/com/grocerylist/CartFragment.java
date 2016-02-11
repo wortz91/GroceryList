@@ -1,7 +1,6 @@
 package com.grocerylist;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
 
 
 /**
@@ -36,9 +37,11 @@ public class CartFragment extends Fragment {
     protected LayoutManagerType mCurrentLayoutManagerType;
 
     protected RecyclerView mRecyclerView;
-    protected CustomAdapter mAdapter;
+    protected MyAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected String[] mDataset;
+    protected ArrayList<ItemData> mDataset;
+    protected ItemData data = new ItemData("test");
+    protected Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,8 +74,10 @@ public class CartFragment extends Fragment {
         }
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-        mAdapter = new CustomAdapter(mDataset);
-        // Set CustomAdapter as the adapter for RecyclerView.
+        mContext = getContext();
+
+        mAdapter = new MyAdapter(mContext, mDataset);
+        // Set MainActivityAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
 
@@ -119,9 +124,9 @@ public class CartFragment extends Fragment {
      * from a local content provider or remote server.
      */
     private void initDataset() {
-        mDataset = new String[DATASET_COUNT];
+        mDataset = new ArrayList<ItemData>(DATASET_COUNT);
         for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset[i] = "This is element #" + i;
+            mDataset.add(data);
         }
     }
 }

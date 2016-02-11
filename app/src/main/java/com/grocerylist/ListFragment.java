@@ -15,19 +15,14 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
+import com.grocerylist.GroceryListTouchHelper;
+import com.grocerylist.ItemData;
+import com.grocerylist.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListFragment extends Fragment {
 
     //List Variables
@@ -86,7 +81,7 @@ public class ListFragment extends Fragment {
 
         recyclerView.findViewById(R.id.recycler_view);
 
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
     /*********************************************************************************************/

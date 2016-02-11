@@ -16,6 +16,8 @@
 
 package com.grocerylist;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.grocerylist.R;
+
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {
     private static final String TAG = "CustomAdapter";
 
     private String[] mDataSet;
+    private Context mContext;
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -37,14 +42,22 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
+        private ItemClickListener clickListener;
+        Context mContext;
 
-        public ViewHolder(View v) {
+
+        public ViewHolder(View v, Context context) {
             super(v);
             // Define click listener for the ViewHolder's View.
+            mContext = context;
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Element " + getPosition() + " clicked.");
+                    clickListener.onClick(v, getPosition(), false);
+                    Intent editActivity = new Intent(mContext, ListFragment.class);
+                    editActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(editActivity);
                 }
             });
             textView = (TextView) v.findViewById(R.id.textView);
@@ -61,8 +74,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
      *
      * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
      */
-    public CustomAdapter(String[] dataSet) {
+    public MainActivityAdapter(String[] dataSet, Context context) {
         mDataSet = dataSet;
+        mContext = context;
     }
 
     // BEGIN_INCLUDE(recyclerViewOnCreateViewHolder)
@@ -73,7 +87,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.text_row_item, viewGroup, false);
 
-        return new ViewHolder(v);
+        return new ViewHolder(v, mContext);
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
 
@@ -94,4 +108,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public int getItemCount() {
         return mDataSet.length;
     }
+
+//    public void remove(int position) {
+//        mDataSet.remove(position);
+//        notifyItemRemoved(position);
+//    }
 }
