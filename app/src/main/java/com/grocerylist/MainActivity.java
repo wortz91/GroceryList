@@ -3,6 +3,11 @@ package com.grocerylist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +33,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 public class MainActivity extends AppCompatActivity {
 
-    //List Variables
+    // List Variables
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
@@ -39,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    // TabLayout Variables
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,33 +54,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        // this is data from recycler view
-        // JSON Data Eventually will be retrieved here
-        ArrayList<ItemData> itemsData = new ArrayList();
-            itemsData.add(new ItemData("Produce"));
-            itemsData.add(new ItemData("Meat"));
-            itemsData.add(new ItemData("Dairy"));
-            itemsData.add(new ItemData("Dry Stock"));
-            itemsData.add(new ItemData("Frozen"));
-            itemsData.add(new ItemData("Alcohol"));
-            itemsData.add(new ItemData("Misc"));
+        // TabView
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-        // 2. set layoutManger
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // 3. create an adapter
-        MyAdapter mAdapter = new MyAdapter(getApplicationContext(), itemsData);
-        // 4. set adapter
-        recyclerView.setAdapter(mAdapter);
-        // 5. set item animator to DefaultAnimator
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
-        ItemTouchHelper.Callback callback = new GroceryListTouchHelper(mAdapter);
-        ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(recyclerView);
-
-        //FloatingActionButton Setup
+        // FloatingActionButton Setup
         FloatingActionsMenu fabMenu = (FloatingActionsMenu) findViewById(R.id.fab);
 
         FloatingActionButton fab1 = new FloatingActionButton(this);
@@ -99,62 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         fabMenu.addButton(fab1);
         fabMenu.addButton(fab2);
-
-//        //Expandable List Setup
-//        // ListView Group click listener
-//        expListView.setOnGroupClickListener(new OnGroupClickListener() {
-//
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v,
-//                                        int groupPosition, long id) {
-//                // Toast.makeText(getApplicationContext(),
-//                // "Group Clicked " + listDataHeader.get(groupPosition),
-//                // Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
-//
-//        // ListView Group expanded listener
-//        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-//
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//                Toast.makeText(getApplicationContext(),
-//                        listDataHeader.get(groupPosition) + " Expanded",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        // ListView Group collapsed listener
-//        expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-//
-//            @Override
-//            public void onGroupCollapse(int groupPosition) {
-//                Toast.makeText(getApplicationContext(),
-//                        listDataHeader.get(groupPosition) + " Collapsed",
-//                        Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        // Listview on child click listener
-//        expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-//
-//            @Override
-//            public boolean onChildClick(ExpandableListView parent, View v,
-//                                        int groupPosition, int childPosition, long id) {
-//                // TODO Auto-generated method stub
-//                Toast.makeText(
-//                        getApplicationContext(),
-//                        listDataHeader.get(groupPosition)
-//                                + " : "
-//                                + listDataChild.get(
-//                                listDataHeader.get(groupPosition)).get(
-//                                childPosition), Toast.LENGTH_SHORT)
-//                        .show();
-//                return false;
-//            }
-//        });
     }
 
     @Override
@@ -181,6 +115,46 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*********************************************************************************************/
+    /*                                  ViewPager                                                */
+    /*********************************************************************************************/
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new ListFragment(), "List");
+        adapter.addFragment(new CartFragment(), "Cart");
+        viewPager.setAdapter(adapter);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 
     /*********************************************************************************************/
     /*                                  Bonus Methods                                            */
