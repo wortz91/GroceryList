@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name_title">Name</string>
+    <string name="category_title">Category</string>
+    <string name="amount_title">Amount</string>
+    <string name="unit_title">Unit</string>
+    <string name="notes_title">Notes</string>
+
+    <string-array name="unit_types">
+        <item>unit</item>
+        <item>lbs.</item>
+        <item>oz.</item>
+        <item>gal.</item>
+    </string-array>
+</resources>
