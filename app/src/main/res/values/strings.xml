@@ -15,12 +15,6 @@
     <string name="add_string">Add</string>
     <string name="cancel_string">Cancel</string>
     <string name="select_a_category_string">Select a Category:</string>
-    <string name="large_text">
-        "Amount\n"
-        "Quantity here\n\n\n\n\n"
-        "Notes\n"
-        "..."
-    </string>
 
     <!--Category String Array -->
     <string-array name="category_array">
