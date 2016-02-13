@@ -1,11 +1,13 @@
 package com.grocerylist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -26,5 +28,17 @@ public class EditActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+    public void onClickUpdateItem(View view) {
+        //make a new intent, specifying the next activity to launch on button click.
+        Intent intent = new Intent(this, MainActivity.class);
+        //get the name EditText data and convert to string, then add to intent.
+        EditText nameContent = (EditText) findViewById(R.id.name_content);
+        String nameText = nameContent.getText().toString();
+        intent.putExtra("name", nameText);
+        //get the
+        startActivity(intent);
+    }
+
+
 
 }

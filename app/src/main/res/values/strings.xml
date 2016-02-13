@@ -8,7 +8,6 @@
     <string name="fab1">fab1</string>
     <string name="fab2">fab2</string>
     <string name="title_activity_add">AddActivity</string>
-    <string name="title_activity_edit">EditActivity</string>
     <string name="input_item_name_string">Input Item Name</string>
     <string name="input_size_weight_string">Input Size / Weight (Optional)</string>
     <string name="input_brand_string">Input Brand (Optional)</string>

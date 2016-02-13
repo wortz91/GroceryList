@@ -6,6 +6,7 @@
     <string name="amount_title">Amount</string>
     <string name="unit_title">Unit</string>
     <string name="notes_title">Notes</string>
+    <string name="button_submit">Submit</string>
 
     <string-array name="unit_types">
         <item>unit</item>
