@@ -115,6 +115,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         @Override
         public boolean onLongClick(View view) {
             clickListener.onClick(view, getPosition(), true);
+            Intent deleteActivity = new Intent(mContext, DeleteActivity.class);
+            deleteActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mContext.startActivity(deleteActivity);
             return true;
         }
     }
