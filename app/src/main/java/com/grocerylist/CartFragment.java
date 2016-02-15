@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class CartFragment extends Fragment {
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 60;
+    private static final int DATASET_COUNT = 6;
 
     private enum LayoutManagerType {
         LINEAR_LAYOUT_MANAGER
@@ -38,6 +39,7 @@ public class CartFragment extends Fragment {
 
     protected RecyclerView mRecyclerView;
     protected MyAdapter mAdapter;
+    protected GroceryListTouchHelper groceryListTouchHelper;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<ItemData> mDataset;
     protected ItemData data = new ItemData("test");
@@ -80,6 +82,10 @@ public class CartFragment extends Fragment {
         // Set MainActivityAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
+
+        ItemTouchHelper.Callback callback = new GroceryListTouchHelper(mAdapter);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(mRecyclerView);
 
         return rootView;
     }

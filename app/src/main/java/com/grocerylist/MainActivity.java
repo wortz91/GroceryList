@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         fabMenu.addButton(fab1);
         fabMenu.addButton(fab2);
+
     }
 
     @Override

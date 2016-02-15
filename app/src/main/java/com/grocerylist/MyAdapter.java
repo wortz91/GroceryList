@@ -6,6 +6,7 @@ package com.grocerylist;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     }
 
+    // Return the size of your itemsData (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return itemsData.size();
+    }
+
+    public void remove(int position) {
+        itemsData.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    /*********************************************************************************************/
+    /*                               INNER CLASS                                                 */
+    /*********************************************************************************************/
     // inner class to hold a reference to each item of RecyclerView
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
@@ -80,6 +95,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             itemLayoutView.setTag(itemLayoutView);
             itemLayoutView.setOnClickListener(this);
             itemLayoutView.setOnLongClickListener(this);
+
 
             mContext=context;
         }
@@ -101,17 +117,5 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             clickListener.onClick(view, getPosition(), true);
             return true;
         }
-    }
-
-
-    // Return the size of your itemsData (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return itemsData.size();
-    }
-
-    public void remove(int position) {
-        itemsData.remove(position);
-        notifyItemRemoved(position);
     }
 }
