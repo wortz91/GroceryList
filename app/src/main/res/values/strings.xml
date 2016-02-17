@@ -8,54 +8,18 @@
     <string name="fab1">fab1</string>
     <string name="fab2">fab2</string>
     <string name="title_activity_add">AddActivity</string>
-    <string name="input_item_name_string">Input Item Name</string>
-    <string name="input_size_weight_string">Input Size / Weight (Optional)</string>
-    <string name="input_brand_string">Input Brand (Optional)</string>
-    <string name="add_string">Add</string>
-    <string name="cancel_string">Cancel</string>
-    <string name="select_a_category_string">Select a Category:</string>
+    <!--<string name="title_activity_edit">EditActivity</string>-->
 
-    <!--Category String Array -->
-    <string-array name="category_array">
-        <item>Produce</item>
-        <item>Dairy</item>
-        <item>Dry Goods</item>
-        <item>Meat</item>
-        <item>Beer</item>
-    </string-array>
 
-    <!-- Strings related to add to list -->
-    <string name="select_an_item_name_string">Select an Item Name:</string>
-    <string name="select_a_brand_string">Select a Brand (Optional):</string>
-    <string name="select_a_size_weight_string">Select a Size / Weight (Optional):</string>
-    <string name="input_quantity_string">Input Quantity</string>
-    <string name="input_notes_string">Input Notes</string>
-    <string name="title_activity_add_to_list">AddToListActivity</string>
+    <string name="large_text">
+        "Amount\n"
+        "Quantity here\n\n\n\n\n"
+        "Notes\n"
+        "..."
+    </string>
 
-    <!-- Strings related to Login -->
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="login_string">Login</string>
-    <string name="enter_user_name_string">Enter User Name</string>
-    <string name="enter_password_string">Enter Password</string>
-    <string name="prompt_email">What is your email</string>
-    <string name="prompt_password">What is your password</string>
-    <string name="action_sign_in_short">Short Sign In</string>
-    <string name="action_sign_in">Sign In!</string>
 
-    <!-- Strings related to Edit Activity -->
-    <string name="edit_message">Message for the edits!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="fragment_1">Fragment 1, hello blank fragment</string>
-    <string name="fragment_2">Fragment 2, hello blank fragment</string>
 
-    <string name="element_text">Element</string>
-    <string name="grid_layout_manager">Grid Layout Manager</string>
-    <string name="linear_layout_manager">Linear Layout Manager</string>
-
-    <string name="sample_show_log">Show Log</string>
-    <string name="sample_hide_log">Hide Log</string>
 </resources>

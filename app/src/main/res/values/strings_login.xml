@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings related to Login -->
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="login_string">Login</string>
+    <string name="enter_user_name_string">Enter User Name</string>
+    <string name="enter_password_string">Enter Password</string>
+    <string name="reenter_password_string">Reenter Password</string>
+    <string name="register_string">Register </string>
+    <string name="register_new_user_string">Register New User</string>
+    <string name="login_failed_string">Login failed. Please try again.</string>
+    <string name="registration_successful_string">Registration successful. Press login to start.</string>
+    <string name="registration_failed_string">Registration failed. Please try again.</string>
+</resources>

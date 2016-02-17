@@ -24,39 +24,96 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:hint="@string/enter_user_name_string"
+        android:textSize="20sp"
         android:id="@+id/userNameEditText"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="30dp" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/enter_password_string"
+        android:textSize="20sp"
         android:id="@+id/passwordEditText"
         android:layout_below="@+id/userNameEditText"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="30dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login_string"
+        android:textSize="20sp"
         android:id="@+id/loginButton"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/reenterPasswordEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_new_user_string"
+        android:textSize="20sp"
+        android:id="@+id/loginRegisterButton"
+        android:layout_below="@id/reenterPasswordEditText"
+        android:layout_alignTop="@+id/loginButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/reenter_password_string"
+        android:textSize="20sp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/reenterPasswordEditText"
+        android:layout_below="@+id/passwordEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_failed_string"
+        android:id="@+id/loginFailedTextView"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/registration_failed_string"
+        android:id="@+id/registrationFailedTextView"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/registration_successful_string"
+        android:id="@+id/registrationSuccessfulTextView"
+        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel_string"
-        android:id="@+id/loginCancelButton"
-        android:layout_alignTop="@+id/loginButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:text="Register"
+        android:textSize="20sp"
+        android:id="@+id/loginRegisterButton2"
+        android:layout_below="@id/reenterPasswordEditText"
+        android:layout_alignBottom="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
 
 </RelativeLayout>

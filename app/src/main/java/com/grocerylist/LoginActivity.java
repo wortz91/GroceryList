@@ -19,11 +19,17 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
     //instance variables for widgets
     private EditText loginUserNameEditText;
     private EditText loginPasswordEditText;
+    private EditText reenterPasswordEditText;
     private Button loginButton;
-    private Button loginCancelButton;
+    private Button loginRegisterButton;
+    private Button loginRegisterButton2;
+    private TextView loginFailedTextView;
+    private TextView registrationFailedTextView;
+    private TextView registrationSuccessfulTextView;
 
     private String loginUserNameString = "";
     private String loginPasswordString = "";
+    private String loginPasswordString2 = "";
 
 
     @Override
@@ -35,13 +41,26 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
 
         loginUserNameEditText = (EditText) findViewById(R.id.userNameEditText);
         loginPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
+        reenterPasswordEditText = (EditText) findViewById(R.id.reenterPasswordEditText);
         loginButton = (Button) findViewById(R.id.loginButton);
-        loginCancelButton = (Button) findViewById(R.id.loginCancelButton);
+        loginRegisterButton = (Button) findViewById(R.id.loginRegisterButton);
+        loginRegisterButton2 = (Button) findViewById(R.id.loginRegisterButton2);
+        loginFailedTextView = (TextView) findViewById(R.id.loginFailedTextView);
+        registrationFailedTextView = (TextView) findViewById(R.id.registrationFailedTextView);
+        registrationSuccessfulTextView = (TextView) findViewById(R.id.registrationSuccessfulTextView);
+
+        reenterPasswordEditText.setVisibility(View.GONE);
+        loginFailedTextView.setVisibility(View.GONE);
+        registrationFailedTextView.setVisibility(View.GONE);
+        registrationSuccessfulTextView.setVisibility(View.GONE);
+        loginRegisterButton2.setVisibility(View.GONE);
 
         loginUserNameEditText.setOnEditorActionListener(this);
         loginPasswordEditText.setOnEditorActionListener(this);
+        reenterPasswordEditText.setOnEditorActionListener(this);
         loginButton.setOnClickListener(this);
-        loginCancelButton.setOnClickListener(this);
+        loginRegisterButton.setOnClickListener(this);
+        loginRegisterButton2.setOnClickListener(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,12 +79,14 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 actionId == EditorInfo.IME_ACTION_NEXT ||
                 actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
             switch (v.getId()) {
-                case R.id.inputItemNameEditText:
+                case R.id.userNameEditText:
                     loginUserNameString = loginUserNameEditText.getText().toString();
                     break;
-                case R.id.inputSizeWeightEditText:
+                case R.id.passwordEditText:
                     loginPasswordString = loginPasswordEditText.getText().toString();
                     break;
+                case R.id.reenterPasswordEditText:
+                    loginPasswordString2 = reenterPasswordEditText.getText().toString();
             }
         }
         return false;
@@ -76,10 +97,47 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         switch (v.getId()) {
             case R.id.loginButton:
                 //check user name and password
+                registrationSuccessfulTextView.setVisibility(View.GONE);
+                if (loginUserNameString.equalsIgnoreCase("a") &&
+                        loginPasswordString.equalsIgnoreCase("1"))
+                {
+                    //login success
+                    loginFailedTextView.setVisibility(View.GONE);
+                }
+                else
+                {
+                    loginFailedTextView.setVisibility(View.VISIBLE);
+                }
                 break;
-            case R.id.cancelButton:
-                //go to login
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+            case R.id.loginRegisterButton:
+                //change view for registering new user
+                loginFailedTextView.setVisibility(View.GONE);
+                registrationSuccessfulTextView.setVisibility(View.GONE);
+                loginButton.setVisibility(View.GONE);
+                loginRegisterButton.setVisibility(View.GONE);
+                reenterPasswordEditText.setVisibility(View.VISIBLE);
+                loginRegisterButton2.setVisibility(View.VISIBLE);
+                break;
+
+            case R.id.loginRegisterButton2:
+
+                if (loginUserNameString.equalsIgnoreCase("a") &&
+                        loginPasswordString.equalsIgnoreCase("1") &&
+                        loginPasswordString2.equals(loginPasswordString))
+                {
+                    registrationFailedTextView.setVisibility(View.GONE);
+                    registrationSuccessfulTextView.setVisibility(View.VISIBLE);
+                    loginButton.setVisibility(View.VISIBLE);
+                    loginRegisterButton.setVisibility(View.VISIBLE);
+                    loginRegisterButton2.setVisibility(View.GONE);
+                    reenterPasswordEditText.setVisibility(View.GONE);
+                }
+                else
+                {
+                    registrationFailedTextView.setVisibility(View.VISIBLE);
+                }
+
         }
     }
 }
