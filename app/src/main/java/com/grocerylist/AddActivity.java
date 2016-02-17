@@ -21,7 +21,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddActivity extends AppCompatActivity implements OnEditorActionListener,
+public class AddActivity extends AppCompatActivity implements
 OnClickListener, OnItemSelectedListener {
 
     //Instance variables for widgets
@@ -36,9 +36,9 @@ OnClickListener, OnItemSelectedListener {
     private Button cancelButton;
     private Button addAnotherItemButton;
 
-    private String inputItemNameString = "";
-    private String inputSizeWeightString = "";
-    private String inputBrandString = "";
+    private String inputItemNameString;
+    private String inputSizeWeightString;
+    private String inputBrandString;
     private int spinnerPosition = -1;
 
     @Override
@@ -71,10 +71,7 @@ OnClickListener, OnItemSelectedListener {
         //set adapter for spinner
         selectCategorySpinner.setAdapter(adapter);
 
-        //Set listeners to instance variables
-        inputItemNameEditText.setOnEditorActionListener(this);
-        inputSizeWeightEditText.setOnEditorActionListener(this);
-        inputBrandEditText.setOnEditorActionListener(this);
+
         addButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         addAnotherItemButton.setOnClickListener(this);
@@ -88,46 +85,34 @@ OnClickListener, OnItemSelectedListener {
 
 
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-        if (actionId == EditorInfo.IME_ACTION_DONE ||
-                actionId == EditorInfo.IME_ACTION_NEXT ||
-                actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
-            switch (v.getId()) {
-                case R.id.inputItemNameEditText:
-                    inputItemNameString = inputItemNameEditText.getText().toString();
-                    break;
-                case R.id.inputSizeWeightEditText:
-                    inputSizeWeightString = inputSizeWeightEditText.getText().toString();
-                    break;
-                case R.id.inputBrandEditText:
-                    inputBrandString = inputBrandEditText.getText().toString();
-                    break;
-            }
-        }
-        return false;
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addButton:
+                inputItemNameString = inputItemNameEditText.getText().toString();
+                inputSizeWeightString = inputSizeWeightEditText.getText().toString();
+                inputBrandString = inputBrandEditText.getText().toString();
                 //insert in database
-                if (!inputItemNameString.equals("") && inputItemNameString != null) // &&
-                        //spinnerPosition > -1)
-                {
-                    addSuccessView.setVisibility(View.VISIBLE);
-                    addFailView.setVisibility(View.GONE);
-                    addButton.setVisibility(View.GONE);
-                    addAnotherItemButton.setVisibility(View.VISIBLE);
-                }
-                else
-                {
-                    addFailView.setVisibility(View.VISIBLE);
-                    addButton.setVisibility(View.GONE);
-                    addAnotherItemButton.setVisibility(View.VISIBLE);
-                }
+                if (inputItemNameString != null) // &&
+                {  //spinnerPosition > -1)
+                    if (!inputItemNameString.equals(""))
+                        {
+                            addSuccessView.setVisibility(View.VISIBLE);
+                            addFailView.setVisibility(View.GONE);
+                            addButton.setVisibility(View.GONE);
+                            addAnotherItemButton.setVisibility(View.VISIBLE);
+
+                        }
+                        else
+                        {
+                            addFailView.setVisibility(View.VISIBLE);
+                            addButton.setVisibility(View.GONE);
+                            addAnotherItemButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+
                 break;
             case R.id.cancelButton:
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
