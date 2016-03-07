@@ -1,15 +1,35 @@
 package com.grocerylist;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -42,14 +62,21 @@ public class ListFragment extends Fragment {
     protected GroceryListTouchHelper groceryListTouchHelper;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<ItemData> mDataset;
-    protected ItemData data = new ItemData("test");
+    protected ItemData itemData;
     protected Context mContext;
+
+    private int userID = 1;
+
+    ArrayList<ItemData> items;
+    JsonParser mGparser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataset();
+
+        items = new ArrayList<>();
+
     }
 
     @Override
@@ -129,10 +156,37 @@ public class ListFragment extends Fragment {
      * Generates Strings for RecyclerView's adapter. This data would usually come
      * from a local content provider or remote server.
      */
-    private void initDataset() {
-        mDataset = new ArrayList<ItemData>(DATASET_COUNT);
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset.add(data);
+    private class initDataset extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            //**************************//
+            //                          //
+            // this needs to be ASYNC   //
+            //                          //
+            //**************************//
+            mGparser = new JsonParser();
+            Gson mGson = new Gson();
+
+            String uri = "http://w16groc.franklinpracticum.com/select_script.php?UserID=" + userID;
+            try {
+                URL url = new URL(uri);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("connection", "close");
+                connection.connect();
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                JsonArray request = (JsonArray) mGparser.parse(in.readLine());
+                in.close();
+                items = mGson.fromJson(request, new TypeToken<ArrayList<ItemData>>() {
+                }.getType());
+            } catch (MalformedURLException mfurle) {
+                mfurle.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+            return null;
         }
+
     }
 }

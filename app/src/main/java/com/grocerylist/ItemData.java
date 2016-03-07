@@ -7,31 +7,81 @@ package com.grocerylist;
  */
 public class ItemData {
 
+    private int itemID;
+    private String itemName;
+    private String itemUnitType;
+    private String itemDescription;
+    private double itemPrice;
+    private int itemCount;
+    private String itemCategory;
 
-    private String title;
-    private int imageUrl;
 
     // int imageUrl
-    public ItemData(String title){
+    public ItemData(int itemID, String itemName, String itemUnitType, String itemDescription, double itemPrice, int itemCount, String itemCategory){
 
-        this.title = title;
-        //this.imageUrl = imageUrl;
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.itemUnitType = itemUnitType;
+        this.itemDescription = itemDescription;
+        this.itemPrice = itemPrice;
+        this.itemCount = itemCount;
+        this.itemCategory = itemCategory;
     }
     // getters & setters
 
-    public String getTitle() {
-        return title;
+    public int getItemID() {
+        return itemID;
     }
 
-    public int getImageUrl() {
-        return imageUrl;
+    public void setItemID(int itemID) {
+        this.itemID = itemID;
     }
 
-    public void setImageUrl(int imageUrl) {
-        this.imageUrl = imageUrl;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemUnitType() {
+        return itemUnitType;
+    }
+
+    public void setItemUnitType(String itemUnitType) {
+        this.itemUnitType = itemUnitType;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+
+    public double getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(double itemPrice) {
+        this.itemPrice = itemPrice;
+    }
+
+    public int getItemCount() {
+        return itemCount;
+    }
+
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
+    }
+
+    public String getItemCategory() {
+        return itemCategory;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
     }
 }

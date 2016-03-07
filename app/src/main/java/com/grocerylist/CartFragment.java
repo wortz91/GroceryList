@@ -42,7 +42,7 @@ public class CartFragment extends Fragment {
     protected GroceryListTouchHelper groceryListTouchHelper;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected ArrayList<ItemData> mDataset;
-    protected ItemData data = new ItemData("test");
+    protected ItemData data;
     protected Context mContext;
 
     @Override

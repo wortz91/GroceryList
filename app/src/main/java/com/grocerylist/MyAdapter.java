@@ -50,8 +50,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - replace the contents of the view with that itemsData
         final ViewHolder holder = viewHolder;
 
-        viewHolder.txtViewTitle.setText(itemsData.get(position).getTitle());
-        viewHolder.imgViewIcon.setImageResource(itemsData.get(position).getImageUrl());
+        viewHolder.txtViewTitle.setText(itemsData.get(position).getItemDescription());
 
         viewHolder.setClickListener(new ItemClickListener() {
             @Override
