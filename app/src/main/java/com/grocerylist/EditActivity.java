@@ -1,11 +1,7 @@
 package com.grocerylist;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -17,13 +13,20 @@ import android.widget.Spinner;
 public class EditActivity extends AppCompatActivity {
 
     Button bSubmit;
-    Spinner sCategory;
-    EditText etName, etAmount, etUnit, etNotes;
+    Spinner sCategory, etUnitType;
+    EditText etName, etAmount, etDescription, etPrice, etCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        etName = (EditText) findViewById(R.id.name_content);
+        etAmount = (EditText) findViewById(R.id.amount_content);
+        etDescription = (EditText) findViewById(R.id.description_content);
+
+
+
 //        ActionBar actionBar = getActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -43,11 +46,23 @@ public class EditActivity extends AppCompatActivity {
         //make a new intent, specifying the next activity to launch on button click.
         Intent intent = new Intent(this, MainActivity.class);
         //get the name EditText data and convert to string, then add to intent.
-        etName = (EditText) findViewById(R.id.name_content);
+
+
+
+
         String nameText = etName.getText().toString();
+
+
+
         intent.putExtra("name", nameText);
         //get the category spinner data and convert to string...
         startActivity(intent);
+
+
+
+        ItemData item;
+
+
     }
 
     @Override

@@ -5,8 +5,9 @@
     <string name="category_title">Category</string>
     <string name="amount_title">Amount</string>
     <string name="unit_title">Unit</string>
-    <string name="notes_title">Notes</string>
+    <string name="description_title">Description</string>
     <string name="button_submit">Submit</string>
+    <string name="price_title">Price</string>
 
     <string-array name="unit_types">
         <item>unit</item>
