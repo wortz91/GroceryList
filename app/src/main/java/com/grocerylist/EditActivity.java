@@ -8,10 +8,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class EditActivity extends AppCompatActivity {
+
+    Button bSubmit;
+    Spinner sCategory;
+    EditText etName, etAmount, etUnit, etNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +43,32 @@ public class EditActivity extends AppCompatActivity {
         //make a new intent, specifying the next activity to launch on button click.
         Intent intent = new Intent(this, MainActivity.class);
         //get the name EditText data and convert to string, then add to intent.
-        EditText nameContent = (EditText) findViewById(R.id.name_content);
-        String nameText = nameContent.getText().toString();
+        etName = (EditText) findViewById(R.id.name_content);
+        String nameText = etName.getText().toString();
         intent.putExtra("name", nameText);
-        //get the
+        //get the category spinner data and convert to string...
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                return true;
+
+//            case R.id.action_favorite:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+//                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
 
 }
