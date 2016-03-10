@@ -65,19 +65,19 @@ public class ServerRequests {
         protected Void doInBackground(Void... params) {
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair("name", item.getItemName()));
-            dataToSend.add(new BasicNameValuePair("unitType", item.getItemUnitType()));
-            dataToSend.add(new BasicNameValuePair("description", item.getItemDescription()));
-            dataToSend.add(new BasicNameValuePair("price", item.getItemPrice() + ""));
-            dataToSend.add(new BasicNameValuePair("amount", item.getItemCount() + ""));
-            dataToSend.add(new BasicNameValuePair("category", item.getItemCategory()));
-            dataToSend.add(new BasicNameValuePair("itemId", item.getItemID() + ""));
+            dataToSend.add(new BasicNameValuePair("ItemName", item.getItemName()));
+            dataToSend.add(new BasicNameValuePair("ItemUnitType", item.getItemUnitType()));
+            dataToSend.add(new BasicNameValuePair("ItemDescription", item.getItemDescription()));
+            dataToSend.add(new BasicNameValuePair("ItemPrice", item.getItemPrice() + ""));
+            dataToSend.add(new BasicNameValuePair("ItemCount", item.getItemCount() + ""));
+            dataToSend.add(new BasicNameValuePair("ItemCategory", item.getItemCategory()));
+            dataToSend.add(new BasicNameValuePair("ItemID", item.getItemID() + ""));
 
-            HttpParams httpRequestParams = (HttpParams) new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+       //     HttpParams httpRequestParams = new BasicHttpParams();
+       //     HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+       //     HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
 
-            HttpClient client = new DefaultHttpClient((ClientConnectionManager) httpRequestParams);
+            HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost(SERVER_ADDRESS + "edit_script.php");
 
             try {
@@ -112,20 +112,20 @@ public class ServerRequests {
         @Override
         protected ItemData doInBackground(Void... params) {
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            dataToSend.add(new BasicNameValuePair("name", item.getItemName()));
+            /*dataToSend.add(new BasicNameValuePair("name", item.getItemName()));
             dataToSend.add(new BasicNameValuePair("unitType", item.getItemUnitType()));
             dataToSend.add(new BasicNameValuePair("description", item.getItemDescription()));
             dataToSend.add(new BasicNameValuePair("price", item.getItemPrice() + ""));
             dataToSend.add(new BasicNameValuePair("amount", item.getItemCount() + ""));
             dataToSend.add(new BasicNameValuePair("category", item.getItemCategory()));
-            dataToSend.add(new BasicNameValuePair("itemId", item.getItemID() + ""));
+            dataToSend.add(new BasicNameValuePair("itemId", item.getItemID() + ""));*/
 
             HttpParams httpRequestParams = (HttpParams) new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
             HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
 
             HttpClient client = new DefaultHttpClient((ClientConnectionManager) httpRequestParams);
-            HttpPost post = new HttpPost(SERVER_ADDRESS + "select_script.php");
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "selectItem_script_v2.php");
 
             ItemData returnedItem = null;
 
