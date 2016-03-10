@@ -48,6 +48,7 @@ public class ListFragment extends Fragment {
 
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
+
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 8;
 
@@ -67,21 +68,20 @@ public class ListFragment extends Fragment {
 
     private int userID = 1;
 
-    ArrayList<ItemData> items;
-    JsonParser mGparser;
+    private ArrayList<ItemData> items;
+    private JsonParser mGparser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-        items = new ArrayList<>();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
         rootView.setTag(TAG);
@@ -156,10 +156,10 @@ public class ListFragment extends Fragment {
      * Generates Strings for RecyclerView's adapter. This data would usually come
      * from a local content provider or remote server.
      */
-    private class initDataset extends AsyncTask<Void, Void, String> {
+    private class initDataset extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             //**************************//
             //                          //
             // this needs to be ASYNC   //
@@ -180,6 +180,7 @@ public class ListFragment extends Fragment {
                 in.close();
                 items = mGson.fromJson(request, new TypeToken<ArrayList<ItemData>>() {
                 }.getType());
+
             } catch (MalformedURLException mfurle) {
                 mfurle.printStackTrace();
             } catch (IOException ioe) {

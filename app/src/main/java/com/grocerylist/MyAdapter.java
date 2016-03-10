@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // - replace the contents of the view with that itemsData
         final ViewHolder holder = viewHolder;
 
-        viewHolder.txtViewTitle.setText(itemsData.get(position).getItemDescription());
+        Log.d("ERROR", "There is an error with the holder initialization");
+        // holder.txtViewTitle.setText(itemsData.get(position).getItemDescription());
+        // I am not grabbing the data properly with this setText call.
+        // I think I need to make the
+        holder.txtViewTitle.setText("Test");
+        Log.d("ERROR", "There is an error with the holder initialization after");
 
-        viewHolder.setClickListener(new ItemClickListener() {
+        holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
                 if (isLongClick) {
@@ -68,7 +74,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Return the size of your itemsData (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return itemsData.size();
+        if (itemsData != null) {
+            return itemsData.size();
+        }
+        return 0;
     }
 
     public void remove(int position) {
@@ -90,7 +99,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ViewHolder(View itemLayoutView, Context context) {
             super(itemLayoutView);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.item_title);
-            imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
+            //imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
             itemLayoutView.setTag(itemLayoutView);
             itemLayoutView.setOnClickListener(this);
             itemLayoutView.setOnLongClickListener(this);
