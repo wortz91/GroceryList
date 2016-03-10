@@ -39,14 +39,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/category_title"
-        android:id="@+id/category_content"
+        android:id="@+id/category_spinner"
         android:entries="@array/category_array"/>
 
     <TextView
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:id="@+id/amount_title"
-        android:layout_below="@id/category_content"
+        android:layout_below="@id/category_spinner"
         android:text="@string/amount_title"
         android:textSize="35dp" />
 

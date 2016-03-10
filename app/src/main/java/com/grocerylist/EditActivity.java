@@ -12,9 +12,10 @@ import android.widget.Spinner;
 
 public class EditActivity extends AppCompatActivity {
 
-    Button bSubmit;
-    Spinner sCategory, etUnitType;
-    EditText etName, etAmount, etDescription, etPrice, etCount;
+    private Button bSubmit;
+    private Spinner sCategory, sUnitType;
+    private EditText etName, etAmount, etDescription, etPrice, etId;
+    private int intNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,13 @@ public class EditActivity extends AppCompatActivity {
         etName = (EditText) findViewById(R.id.name_content);
         etAmount = (EditText) findViewById(R.id.amount_content);
         etDescription = (EditText) findViewById(R.id.description_content);
+        etPrice = (EditText) findViewById(R.id.price_content);
+        sCategory = (Spinner) findViewById(R.id.category_spinner);
+        sUnitType = (Spinner) findViewById(R.id.unit_spinner);
+        etId = (EditText) findViewById(R.id.name_content);
+
+        Intent intent = getIntent();
+        intNum = intent.getIntExtra("itemId", -99);
 
 
 
@@ -42,6 +50,13 @@ public class EditActivity extends AppCompatActivity {
 //        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        displayItemDetails();
+    }
+
     public void onClickUpdateItem(View view) {
         //make a new intent, specifying the next activity to launch on button click.
         Intent intent = new Intent(this, MainActivity.class);
@@ -50,19 +65,34 @@ public class EditActivity extends AppCompatActivity {
 
 
 
-        String nameText = etName.getText().toString();
+        String name = etName.getText().toString();
+        int amount = Integer.parseInt(etAmount.getText().toString());
+        String description = etDescription.getText().toString();
+        double price = Double.parseDouble(etPrice.getText().toString());
+        String category = sCategory.getSelectedItem().toString();
+        String unitType = sUnitType.getSelectedItem().toString();
 
+        ItemData item = new ItemData(intNum, name, unitType, description, price, amount, category);
 
+        submitItemChanges(item);
 
-        intent.putExtra("name", nameText);
+        //intent.putExtra("name", name);
         //get the category spinner data and convert to string...
-        startActivity(intent);
+        //startActivity(intent);
+    }
 
+    private void submitItemChanges(ItemData item) {
+        ServerRequests serverRequests = new ServerRequests(this);
+        serverRequests.storeItemDataInBackground(item, new GetItemCallback() {
+            @Override
+            public void done(ItemData returnedItem) {
+                startActivity(new Intent(EditActivity.this, MainActivity.class));
+            }
+        });
+    }
 
-
-        ItemData item;
-
-
+    private void displayItemDetails() {
+        //set the values in the EditText onStart....
     }
 
     @Override
