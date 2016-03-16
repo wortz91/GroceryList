@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Bundle b = getIntent().getExtras();
+        userID = b.getInt("UserID");
+        System.out.println("main activity:" + userID);
+
         // TabView
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);

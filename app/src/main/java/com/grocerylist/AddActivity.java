@@ -2,6 +2,7 @@ package com.grocerylist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,21 @@ import android.widget.Spinner;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
 public class AddActivity extends AppCompatActivity implements
 OnClickListener, OnItemSelectedListener {
@@ -47,6 +63,10 @@ OnClickListener, OnItemSelectedListener {
         setContentView(R.layout.activity_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //strict mode
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         // Get references to widgets
         selectCategoryView = (TextView) findViewById(R.id.selectCategoryTextView);
@@ -98,7 +118,33 @@ OnClickListener, OnItemSelectedListener {
                 if (inputItemNameString != null) // &&
                 {  //spinnerPosition > -1)
                     if (!inputItemNameString.equals(""))
-                        {
+                    {
+                        try {
+                            JSONObject jo = new JSONObject();
+                            jo.put("ItemName", inputItemNameEditText.getText());
+                            jo.put("ItemUnitType", "lb");
+                            jo.put("ItemDescription", inputBrandEditText.getText());
+                            jo.put("ItemPrice", 20.31);
+                            jo.put("ItemCategory", "meat");
+                        }
+                        catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            URL url = new URL("http://w16groc.franklinpracticum.com/add_script.php?" +
+                                    "ItemName=%27apples" +
+                                    "%27&ItemUnitType=%27lb%27&" +
+                                    "ItemDescription=%27red%27&" +
+                                    "ItemPrice=20.31&ItemCount=200&" +
+                                    "ItemCategory=%27meat%27");
+                            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+                            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                            }
+                        catch(IOException e) {
+                                e.printStackTrace();
+                        }
                             addSuccessView.setVisibility(View.VISIBLE);
                             addFailView.setVisibility(View.GONE);
                             addButton.setVisibility(View.GONE);

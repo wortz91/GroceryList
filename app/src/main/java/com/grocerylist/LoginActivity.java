@@ -2,6 +2,7 @@ package com.grocerylist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class LoginActivity extends AppCompatActivity implements TextView.OnEditorActionListener,
         View.OnClickListener{
+
 
     //instance variables for widgets
     private EditText loginUserNameEditText;
@@ -39,6 +46,9 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         loginUserNameEditText = (EditText) findViewById(R.id.userNameEditText);
         loginPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
         reenterPasswordEditText = (EditText) findViewById(R.id.reenterPasswordEditText);
@@ -62,14 +72,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         loginRegisterButton.setOnClickListener(this);
         loginRegisterButton2.setOnClickListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
     }
 
     @Override
@@ -98,11 +101,50 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
             case R.id.loginButton:
                 //check user name and password
                 registrationSuccessfulTextView.setVisibility(View.GONE);
-                if (loginUserNameString.equalsIgnoreCase("a") &&
-                        loginPasswordString.equalsIgnoreCase("1"))
+
+                //send to database
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL("http://w16groc.franklinpracticum.com/login_script.php?" +
+                            "UserName=%27" + loginUserNameString +
+                            "%27&Password=%27" + loginPasswordString  + "%27");
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String s;
+                    while((s=bufferedReader.readLine())!=null){
+                        sb.append(s+"\n");
+                    }
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                int userId = 0;
+                try {
+                    String IDString = sb.toString();
+                    String[] split = IDString.split(":");
+                    String userIDBlock = split[2];
+
+                    System.out.println(userIDBlock);
+                    String[] split2 = userIDBlock.split("\"");
+                    String s = split2[1];
+                    System.out.println(s);
+                    userId = Integer.parseInt(s);
+                } catch (Exception e) {
+                    loginFailedTextView.setVisibility(View.VISIBLE);
+
+                }
+
+
+                if (!sb.toString().startsWith("Login"))
                 {
                     //login success
                     loginFailedTextView.setVisibility(View.GONE);
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("UserID", userId);
+                    startActivity(intent);
                 }
                 else
                 {
