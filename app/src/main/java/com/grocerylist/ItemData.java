@@ -15,6 +15,9 @@ public class ItemData {
     private int itemCount;
     private String itemCategory;
 
+    public ItemData() {
+
+    }
 
     // int imageUrl
     public ItemData(int itemID, String itemName, String itemUnitType, String itemDescription, double itemPrice, int itemCount, String itemCategory){
@@ -83,5 +86,10 @@ public class ItemData {
 
     public void setItemCategory(String itemCategory) {
         this.itemCategory = itemCategory;
+    }
+
+    @Override
+    public String toString() {
+        return "ItemID:" + getItemID() + "ItemName: " + getItemName() + " ItemCategory: " + getItemCategory();
     }
 }

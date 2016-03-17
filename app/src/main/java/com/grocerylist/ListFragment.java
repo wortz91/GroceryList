@@ -1,8 +1,10 @@
 package com.grocerylist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -24,13 +30,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -52,6 +61,8 @@ public class ListFragment extends Fragment {
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 8;
 
+    private ListView listView;
+
     private enum LayoutManagerType {
         LINEAR_LAYOUT_MANAGER
     }
@@ -67,9 +78,9 @@ public class ListFragment extends Fragment {
     protected Context mContext;
 
     private int userID = 1;
+    private int itemID = 0;
 
     private ArrayList<ItemData> items;
-    private JsonParser mGparser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,8 +94,30 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
-        rootView.setTag(TAG);
+        View rootView = inflater.inflate(R.layout.list_fragment_view, container, false);
+
+        listView = (ListView) rootView.findViewById(R.id.list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), EditActivity.class);
+                intent.putExtra("ItemID", itemID);
+                startActivity(intent);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                Intent intent = new Intent(getContext(), DeleteActivity.class);
+                intent.putExtra("ItemID", itemID);
+                startActivity(intent);
+                // Return true to consume the click event. In this case the
+                // onListItemClick listener is not called anymore.
+                return true;
+            }
+        });
+/*        rootView.setTag(TAG);
 
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -112,9 +145,92 @@ public class ListFragment extends Fragment {
 
         ItemTouchHelper.Callback callback = new GroceryListTouchHelper(mAdapter);
         ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(mRecyclerView);
+        helper.attachToRecyclerView(mRecyclerView);*/
+
+        updateListView();
 
         return rootView;
+    }
+
+    public void updateListView() {
+        JSONArray ja = this.getItems();
+
+        List<String> itemsArray = new ArrayList<String>();
+
+        for (int i = 0; i < ja.length(); i++) {
+            try {
+                JSONObject jo = ja.getJSONObject(i);
+
+                ItemData item = new ItemData();
+                item.setItemID(jo.optInt("ItemID"));
+                item.setItemName(jo.optString("ItemName"));
+                item.setItemUnitType(jo.optString("ItemUnitType"));
+                item.setItemDescription(jo.optString("ItemDescription"));
+                item.setItemPrice(jo.optDouble("ItemPrice"));
+                item.setItemCount(jo.optInt("ItemCount"));
+                item.setItemCategory(jo.optString("ItemCategory"));
+
+                Log.d("JSONObject:", jo.toString());
+                itemsArray.add(item.toString());
+                itemID = item.getItemID();
+                Log.d("itemID:", itemID+"");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                itemsArray);
+        Log.d("Array Items:", itemsArray.get(0).toString());
+        Log.d("Activity", getActivity().toString());
+
+        listView.setAdapter(arrayAdapter);
+    }
+
+    public JSONArray getItems() {
+        //http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+//        String urlAddress = "http://groceryapp-russjw.rhcloud.com/GroceryAppFranklin/rest/items/";
+        String urlAddress = "http://w16groc.franklinpracticum.com/select_script.php?UserID=" + userID;
+
+        InputStream inputStream = null;
+
+        JSONObject jo = null;
+        JSONArray ja = null;
+
+        try {
+            URL url = new URL(urlAddress);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+            // receive response as inputStream
+            inputStream = new BufferedInputStream(urlConnection.getInputStream());
+
+            Log.v(TAG, "rest url:" + url);
+
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+            }
+
+            Log.v(TAG, "rest data" + total.toString());
+
+            ja = new JSONArray(total.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return ja;
     }
 
     /**
@@ -152,42 +268,5 @@ public class ListFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private class initDataset extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            //**************************//
-            //                          //
-            // this needs to be ASYNC   //
-            //                          //
-            //**************************//
-            mGparser = new JsonParser();
-            Gson mGson = new Gson();
-
-            String uri = "http://w16groc.franklinpracticum.com/select_script.php?UserID=" + userID;
-            try {
-                URL url = new URL(uri);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("connection", "close");
-                connection.connect();
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                JsonArray request = (JsonArray) mGparser.parse(in.readLine());
-                in.close();
-                items = mGson.fromJson(request, new TypeToken<ArrayList<ItemData>>() {
-                }.getType());
-
-            } catch (MalformedURLException mfurle) {
-                mfurle.printStackTrace();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-            return null;
-        }
-
-    }
 }

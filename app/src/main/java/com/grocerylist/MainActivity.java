@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         userID = b.getInt("UserID");
-        System.out.println("main activity:" + userID);
+        Log.d("main activity:", userID+"");
 
         // TabView
         viewPager = (ViewPager) findViewById(R.id.viewpager);
