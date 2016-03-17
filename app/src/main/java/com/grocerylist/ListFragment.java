@@ -77,7 +77,7 @@ public class ListFragment extends Fragment {
     protected ItemData itemData;
     protected Context mContext;
 
-    private int userID = 1;
+    private int userID;
     private int itemID = 0;
 
     private ArrayList<ItemData> items;
@@ -96,6 +96,16 @@ public class ListFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.list_fragment_view, container, false);
 
+        if(savedInstanceState == null) {
+            Bundle extras = getActivity().getIntent().getExtras();
+
+            if(extras == null) {
+                userID = 2;
+            } else {
+                userID = extras.getInt("UserID");
+            }
+        }
+        Log.d("UserID after Pass", userID + "");
         listView = (ListView) rootView.findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

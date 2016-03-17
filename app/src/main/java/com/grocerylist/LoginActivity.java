@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -132,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                     String s = split2[1];
                     System.out.println(s);
                     userId = Integer.parseInt(s);
+                    Log.d("UserID:", userId+"");
                 } catch (Exception e) {
                     loginFailedTextView.setVisibility(View.VISIBLE);
 
