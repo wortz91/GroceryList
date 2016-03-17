@@ -73,14 +73,14 @@ public class ListFragment extends Fragment {
     protected MyAdapter mAdapter;
     protected GroceryListTouchHelper groceryListTouchHelper;
     protected RecyclerView.LayoutManager mLayoutManager;
-    protected ArrayList<ItemData> mDataset;
+    // protected ArrayList<ItemData> mDataset;
     protected ItemData itemData;
     protected Context mContext;
 
     private int userID;
     private int itemID = 0;
 
-    private ArrayList<ItemData> items;
+    //private ArrayList<ItemData> items;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,35 +127,6 @@ public class ListFragment extends Fragment {
                 return true;
             }
         });
-/*        rootView.setTag(TAG);
-
-        // BEGIN_INCLUDE(initializeRecyclerView)
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
-        mLayoutManager = new LinearLayoutManager(getActivity());
-
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
-        }
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-
-        mContext = getContext();
-
-        mAdapter = new MyAdapter(mContext, mDataset);
-        // Set MainActivityAdapter as the adapter for RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        // END_INCLUDE(initializeRecyclerView)
-
-        ItemTouchHelper.Callback callback = new GroceryListTouchHelper(mAdapter);
-        ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(mRecyclerView);*/
 
         updateListView();
 
