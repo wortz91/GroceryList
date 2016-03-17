@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -62,6 +63,8 @@ public class ListFragment extends Fragment {
     private static final int DATASET_COUNT = 8;
 
     private ListView listView;
+    ArrayAdapter<String> arrayAdapter;
+    SwipeDetector swipeDetector = new SwipeDetector();
 
     private enum LayoutManagerType {
         LINEAR_LAYOUT_MANAGER
@@ -69,18 +72,11 @@ public class ListFragment extends Fragment {
 
     protected LayoutManagerType mCurrentLayoutManagerType;
 
-    protected RecyclerView mRecyclerView;
-    protected MyAdapter mAdapter;
-    protected GroceryListTouchHelper groceryListTouchHelper;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    // protected ArrayList<ItemData> mDataset;
-    protected ItemData itemData;
     protected Context mContext;
 
     private int userID;
     private int itemID = 0;
 
-    //private ArrayList<ItemData> items;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,24 +103,40 @@ public class ListFragment extends Fragment {
         }
         Log.d("UserID after Pass", userID + "");
         listView = (ListView) rootView.findViewById(R.id.list);
+        listView.setOnTouchListener(swipeDetector);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), EditActivity.class);
-                intent.putExtra("ItemID", itemID);
-                startActivity(intent);
+                if(swipeDetector.swipeDetected()){
+                    Log.d("Detected a swipe: ", "onItemClick");
+                    if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        Log.d("OnClickItem was Swiped", "Oh YEAH!");
+                    }
+                } else {
+                    Intent intent = new Intent(getContext(), EditActivity.class);
+                    intent.putExtra("ItemID", itemID);
+                    startActivity(intent);
+                }
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                Intent intent = new Intent(getContext(), DeleteActivity.class);
-                intent.putExtra("ItemID", itemID);
-                startActivity(intent);
-                // Return true to consume the click event. In this case the
-                // onListItemClick listener is not called anymore.
-                return true;
+                if(swipeDetector.swipeDetected()){
+                    Log.d("Detected a swipe: ", "onItemLongClick");
+                    if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                        Log.d("LongClickItem Swiped", "Oh YEAH!");
+                    }
+                } else {
+                    Intent intent = new Intent(getContext(), DeleteActivity.class);
+                    intent.putExtra("ItemID", itemID);
+                    startActivity(intent);
+                    // Return true to consume the click event. In this case the
+                    // onListItemClick listener is not called anymore.
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -160,7 +172,7 @@ public class ListFragment extends Fragment {
             }
         }
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        arrayAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
                 itemsArray);
@@ -214,33 +226,6 @@ public class ListFragment extends Fragment {
         return ja;
     }
 
-    /**
-     * Set RecyclerView's LayoutManager to the one given.
-     *
-     * @param layoutManagerType Type of layout manager to switch to.
-     */
-    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
-        int scrollPosition = 0;
-
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
-        }
-
-        switch (layoutManagerType) {
-            case LINEAR_LAYOUT_MANAGER:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                break;
-            default:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        }
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

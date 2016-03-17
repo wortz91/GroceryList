@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     // TabLayout Variables
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
 
     //UserID
     int userID = 1;
@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d("main activity:", userID+"");
 
         // TabView
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (CustomViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+        viewPager.setPagingEnabled(false);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
