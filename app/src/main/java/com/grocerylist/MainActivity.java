@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action 1", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent addToCart = new Intent(getApplicationContext(), AddActivity.class);
+                addToCart.putExtra("UserID", userID);
                 startActivity(addToCart);
             }
         });

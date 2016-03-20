@@ -92,4 +92,8 @@ public class ItemData {
     public String toString() {
         return "ItemID:" + getItemID() + "ItemName: " + getItemName() + " ItemCategory: " + getItemCategory();
     }
+
+    public String toItemName() {
+        return getItemName();
+    }
 }

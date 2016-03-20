@@ -56,6 +56,8 @@ public class ListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    // trwar
+
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
 
@@ -76,6 +78,9 @@ public class ListFragment extends Fragment {
 
     private int userID;
     private int itemID = 0;
+
+//    Bundle bundle;
+//    Fragment fragment;
 
 
     @Override
@@ -115,6 +120,7 @@ public class ListFragment extends Fragment {
                 } else {
                     Intent intent = new Intent(getContext(), EditActivity.class);
                     intent.putExtra("ItemID", itemID);
+                    intent.putExtra("UserID", userID);
                     startActivity(intent);
                 }
             }
@@ -131,6 +137,7 @@ public class ListFragment extends Fragment {
                 } else {
                     Intent intent = new Intent(getContext(), DeleteActivity.class);
                     intent.putExtra("ItemID", itemID);
+                    intent.putExtra("UserID", userID);
                     startActivity(intent);
                     // Return true to consume the click event. In this case the
                     // onListItemClick listener is not called anymore.
@@ -154,6 +161,10 @@ public class ListFragment extends Fragment {
             try {
                 JSONObject jo = ja.getJSONObject(i);
 
+//                // setup passing the ItemName to the CartFragment
+//                bundle = new Bundle();
+//                fragment = new CartFragment();
+
                 ItemData item = new ItemData();
                 item.setItemID(jo.optInt("ItemID"));
                 item.setItemName(jo.optString("ItemName"));
@@ -164,8 +175,15 @@ public class ListFragment extends Fragment {
                 item.setItemCategory(jo.optString("ItemCategory"));
 
                 Log.d("JSONObject:", jo.toString());
-                itemsArray.add(item.toString());
+                itemsArray.add(item.toItemName());
                 itemID = item.getItemID();
+//
+//                // passing ItemName to the CartFragment
+//                String itemNameStr = item.toString();
+//                bundle.putString("ItemName", itemNameStr);
+//
+//                fragment.setArguments(bundle);
+
                 Log.d("itemID:", itemID+"");
             } catch (JSONException e) {
                 e.printStackTrace();

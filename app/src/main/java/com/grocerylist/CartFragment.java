@@ -1,16 +1,31 @@
 package com.grocerylist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,8 +43,7 @@ public class CartFragment extends Fragment {
 
     private static final String TAG = "RecyclerViewFragment";
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
-    private static final int SPAN_COUNT = 2;
-    private static final int DATASET_COUNT = 6;
+
 
     private enum LayoutManagerType {
         LINEAR_LAYOUT_MANAGER
@@ -37,86 +51,164 @@ public class CartFragment extends Fragment {
 
     protected LayoutManagerType mCurrentLayoutManagerType;
 
-    protected RecyclerView mRecyclerView;
-    protected MyAdapter mAdapter;
-    protected GroceryListTouchHelper groceryListTouchHelper;
-    protected RecyclerView.LayoutManager mLayoutManager;
-    protected ArrayList<ItemData> mDataset;
-    protected ItemData data;
-    protected Context mContext;
+    private ListView cartView;
+    ArrayAdapter<String> arrayAdapter2;
+    SwipeDetector swiper = new SwipeDetector();
+
+    private int userID2;
+    private int itemID2 = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataset();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
-        rootView.setTag(TAG);
+        View rootView = inflater.inflate(R.layout.list_fragment_view_2, container, false);
 
-        // BEGIN_INCLUDE(initializeRecyclerView)
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        // THIS needs to be fixed. This onCreateView does not need this Bundle
+        // THIS does not need the UserID
+        // THIS view needs only the item that is passed whenever a swipe LR is performed (ListFragment)
+        // THIS
 
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        if(savedInstanceState == null) {
+            Bundle extras = getActivity().getIntent().getExtras();
 
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
+            if(extras == null) {
+                userID2 = 2;
+            } else {
+                userID2 = extras.getInt("UserID");
+            }
         }
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+        Log.d("UserID after Pass", userID2 + "");
+        cartView = (ListView) rootView.findViewById(R.id.list2);
+        cartView.setOnTouchListener(swiper);
+        cartView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (swiper.swipeDetected()) {
+                    Log.d("Detected a swipe: ", "onItemClick");
+                    if (swiper.getAction() == SwipeDetector.Action.LR) {
+                        Log.d("OnClickItem was Swiped", "Oh YEAH!");
+                    }
+                } else {
+                    Intent intent = new Intent(getContext(), EditActivity.class);
+                    intent.putExtra("ItemID", itemID2);
+                    startActivity(intent);
+                }
+            }
+        });
+        cartView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                if (swiper.swipeDetected()) {
+                    Log.d("Detected a swipe: ", "onItemLongClick");
+                    if (swiper.getAction() == SwipeDetector.Action.LR) {
+                        Log.d("LongClickItem Swiped", "Oh YEAH!");
+                    }
+                } else {
+                    Intent intent = new Intent(getContext(), DeleteActivity.class);
+                    intent.putExtra("ItemID", itemID2);
+                    startActivity(intent);
+                    // Return true to consume the click event. In this case the
+                    // onListItemClick listener is not called anymore.
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        mContext = getContext();
-
-        mAdapter = new MyAdapter(mContext, mDataset);
-        // Set MainActivityAdapter as the adapter for RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        // END_INCLUDE(initializeRecyclerView)
-
-        ItemTouchHelper.Callback callback = new GroceryListTouchHelper(mAdapter);
-        ItemTouchHelper helper = new ItemTouchHelper(callback);
-        helper.attachToRecyclerView(mRecyclerView);
+        updateListView();
 
         return rootView;
     }
 
-    /**
-     * Set RecyclerView's LayoutManager to the one given.
-     *
-     * @param layoutManagerType Type of layout manager to switch to.
-     */
-    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
-        int scrollPosition = 0;
+    public void updateListView() {
+        JSONArray ja = this.getItems();
 
-        // If a layout manager has already been set, get current scroll position.
-        if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
-                    .findFirstCompletelyVisibleItemPosition();
+        List<String> itemsArray = new ArrayList<String>();
+
+        for (int i = 0; i < ja.length(); i++) {
+            try {
+                JSONObject jo = ja.getJSONObject(i);
+
+                ItemData item = new ItemData();
+                item.setItemID(jo.optInt("ItemID"));
+                item.setItemName(jo.optString("ItemName"));
+                item.setItemUnitType(jo.optString("ItemUnitType"));
+                item.setItemDescription(jo.optString("ItemDescription"));
+                item.setItemPrice(jo.optDouble("ItemPrice"));
+                item.setItemCount(jo.optInt("ItemCount"));
+                item.setItemCategory(jo.optString("ItemCategory"));
+
+                Log.d("JSONObject:", jo.toString());
+                itemsArray.add(item.toString());
+                itemID2 = item.getItemID();
+                Log.d("itemID:", itemID2+"");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
-        switch (layoutManagerType) {
-            case LINEAR_LAYOUT_MANAGER:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-                break;
-            default:
-                mLayoutManager = new LinearLayoutManager(getActivity());
-                mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-        }
+        arrayAdapter2 = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                itemsArray);
+        Log.d("Array Items:", itemsArray.get(0).toString());
+        Log.d("Activity", getActivity().toString());
 
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.scrollToPosition(scrollPosition);
+        cartView.setAdapter(arrayAdapter2);
     }
+
+    public JSONArray getItems() {
+        //http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+//        String urlAddress = "http://groceryapp-russjw.rhcloud.com/GroceryAppFranklin/rest/items/";
+        String urlAddress = "http://w16groc.franklinpracticum.com/select_script.php?UserID=" + userID2;
+
+        InputStream inputStream = null;
+
+        JSONObject jo = null;
+        JSONArray ja = null;
+
+        try {
+            URL url = new URL(urlAddress);
+
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+            // receive response as inputStream
+            inputStream = new BufferedInputStream(urlConnection.getInputStream());
+
+            Log.v(TAG, "rest url:" + url);
+
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+            }
+
+            Log.v(TAG, "rest data" + total.toString());
+
+            ja = new JSONArray(total.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return ja;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -125,14 +217,5 @@ public class CartFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private void initDataset() {
-        mDataset = new ArrayList<ItemData>(DATASET_COUNT);
-        for (int i = 0; i < DATASET_COUNT; i++) {
-            mDataset.add(data);
-        }
-    }
+
 }
