@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
     //UserID
     int userID = 1;
 
-    //here to push to repository
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
