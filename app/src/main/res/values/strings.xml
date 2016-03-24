@@ -17,9 +17,7 @@
         "Notes\n"
         "..."
     </string>
-
-
-
+    <string name="title_activity_add_database">AddDatabase</string>
 
 
 </resources>

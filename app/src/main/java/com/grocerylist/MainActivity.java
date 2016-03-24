@@ -7,25 +7,16 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -34,17 +25,6 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    // List Variables
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-
-    // RecyclerView Variables
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     // TabLayout Variables
     private TabLayout tabLayout;
@@ -60,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle b = getIntent().getExtras();
-        userID = b.getInt("UserID");
+//        Bundle b = getIntent().getExtras();
+//        userID = b.getInt("UserID");
         Log.d("main activity:", userID+"");
 
         // TabView
@@ -76,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionsMenu fabMenu = (FloatingActionsMenu) findViewById(R.id.fab);
 
         FloatingActionButton fab1 = new FloatingActionButton(this);
+        fab1.setIcon(R.drawable.ic_database);
 
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,13 +70,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FloatingActionButton fab2 = new FloatingActionButton(this);
+        fab2.setIcon(R.drawable.ic_list);
 
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action 2", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
+                Intent addToDatabase = new Intent(getApplicationContext(), AddList.class);
+                addToDatabase.putExtra("UserID", userID);
+                startActivity(addToDatabase);
             }
         });
 
@@ -134,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     /*********************************************************************************************/
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ListFragment(), "List");
+        adapter.addFragment(new com.grocerylist.ListFragment(), "List");
         adapter.addFragment(new CartFragment(), "Cart");
         viewPager.setAdapter(adapter);
     }

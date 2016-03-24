@@ -9,8 +9,7 @@
 
     <!-- This allows the application to connect to the internet for the PHP RESTful service calls -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,9 +20,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".AddActivity"
             android:label="@string/title_activity_add"
@@ -32,23 +29,27 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity
-            android:name=".DeleteActivity" />
+        <activity android:name=".DeleteActivity" />
         <activity
             android:name=".EditActivity"
             android:label="@string/title_activity_edit"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MainActivity">
+
             <!-- meta-data only needed for apps below API 16 -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+        <activity
+            android:name=".AddList"
+            android:label="@string/title_activity_add_database"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
