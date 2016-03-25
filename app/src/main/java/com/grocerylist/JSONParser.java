@@ -23,6 +23,9 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.client.utils.URLEncodedUtils;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 
+/*
+ * Example followed: http://www.androidhive.info/2012/05/how-to-connect-android-with-php-mysql/
+ */
 public class JSONParser {
 
     static InputStream is = null;

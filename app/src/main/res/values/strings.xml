@@ -19,5 +19,9 @@
     </string>
     <string name="title_activity_add_database">AddDatabase</string>
 
+    <string name="choose_title">Choose how to pay</string>
+    <string name="title_activity_pay">PayActivity</string>
+    <string name="button_pay">Pay Now</string>
+
 
 </resources>

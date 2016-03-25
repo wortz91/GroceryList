@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new com.grocerylist.ListFragment(), "List");
-        adapter.addFragment(new CartFragment(), "Cart");
+        adapter.addFragment(new PayFragment(), "Pay");
         viewPager.setAdapter(adapter);
     }
 

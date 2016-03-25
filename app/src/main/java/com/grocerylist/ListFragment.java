@@ -2,13 +2,9 @@ package com.grocerylist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +12,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +31,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CartFragment.OnFragmentInteractionListener} interface
+ * {@link PayFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CartFragment#newInstance} factory method to
+ * Use the {@link PayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ListFragment extends Fragment {
@@ -67,6 +52,9 @@ public class ListFragment extends Fragment {
     private ListView listView;
     ArrayAdapter<String> arrayAdapter;
     SwipeDetector swipeDetector = new SwipeDetector();
+    public List<String> itemsArray;
+    public List<String> copiedList = new ArrayList<>();
+
 
     private enum LayoutManagerType {
         LINEAR_LAYOUT_MANAGER
@@ -78,6 +66,8 @@ public class ListFragment extends Fragment {
 
     private int userID;
     private int itemID = 0;
+
+    boolean swiped = false;
 
 //    Bundle bundle;
 //    Fragment fragment;
@@ -116,6 +106,15 @@ public class ListFragment extends Fragment {
                     Log.d("Detected a swipe: ", "onItemClick");
                     if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
                         Log.d("OnClickItem was Swiped", "Oh YEAH!");
+
+                        List<String> passedList = swipeDetectedAction(itemsArray, position);
+                        Log.d("passedList:", passedList.get(position));
+                        Bundle args = new Bundle();
+                        args.putString("PassedList", passedList.get(position));
+                        args.putBoolean("Swiped", swiped);
+
+                        Fragment frag = new PayFragment();
+                        frag.setArguments(args);
                     }
                 } else {
                     Intent intent = new Intent(getContext(), EditActivity.class);
@@ -155,15 +154,15 @@ public class ListFragment extends Fragment {
     public void updateListView() {
         JSONArray ja = this.getItems();
 
-        List<String> itemsArray = new ArrayList<String>();
+        itemsArray = new ArrayList<String>();
 
         for (int i = 0; i < ja.length(); i++) {
             try {
                 JSONObject jo = ja.getJSONObject(i);
 
-//                // setup passing the ItemName to the CartFragment
+//                // setup passing the ItemName to the PayFragment
 //                bundle = new Bundle();
-//                fragment = new CartFragment();
+//                fragment = new PayFragment();
 
                 ItemData item = new ItemData();
                 item.setItemID(jo.optInt("ItemID"));
@@ -178,7 +177,7 @@ public class ListFragment extends Fragment {
                 itemsArray.add(item.toItemName());
                 itemID = item.getItemID();
 //
-//                // passing ItemName to the CartFragment
+//                // passing ItemName to the PayFragment
 //                String itemNameStr = item.toString();
 //                bundle.putString("ItemName", itemNameStr);
 //
@@ -244,6 +243,20 @@ public class ListFragment extends Fragment {
         return ja;
     }
 
+    public List<String> swipeDetectedAction(List<String> itemsArray, int position) {
+        Log.d("Position(262):", position + "");
+        Log.d("itemsArray value:", itemsArray.get(position));
+
+        String itemsArrayAdd = itemsArray.get(position);
+        Log.d("itemsArrayAdd", itemsArrayAdd);
+
+        copiedList.add(itemsArray.get(position));
+        Log.d("copiedList:", copiedList.get(0));
+
+        itemsArray.remove(position);
+
+        return copiedList;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
