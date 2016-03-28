@@ -152,6 +152,7 @@ public class ListFragment extends Fragment {
     }
 
     public void updateListView() {
+        Log.d("(156)userID=", userID + "");
         JSONArray ja = this.getItems();
 
         itemsArray = new ArrayList<String>();

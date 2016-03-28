@@ -5,30 +5,43 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Config;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 public class EditActivity extends AppCompatActivity {
 
     public static final String SERVER_ADDRESS = "http://w16groc.franklinpracticum.com/";
 
+    //JSON parser
+    JSONParser jsonParser = new JSONParser();
+
 
     //private Button bSubmit;
     private Spinner sCategory, sUnitType;
     private EditText etName, etAmount, etDescription, etPrice, etId;
-    private int intNum = 2; //Temporary hardcode!!!!!!!!!!!!!
+    private int intNum;
+    private int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +55,15 @@ public class EditActivity extends AppCompatActivity {
         sCategory = (Spinner) findViewById(R.id.category_spinner);
         sUnitType = (Spinner) findViewById(R.id.unit_spinner);
 
-
         Intent intent = getIntent();
-        //intNum = intent.getIntExtra("itemId", -99); //Turn back on!!!!
+        intNum = intent.getIntExtra("ItemID", -99);
+        Log.d("(49)intNum=", intNum + "");
+        userID = intent.getIntExtra("UserID", -98);
+        Log.d("(51)userId=", userID + "");
 
-        //etId.setText(intNum + "");
+/*
+        etId.setText(intNum + "");
+*/
 
         getItem();
 
@@ -75,7 +92,7 @@ public class EditActivity extends AppCompatActivity {
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
                 String s = rh.sendGetRequestParam(SERVER_ADDRESS +
-                                "selectItem_script_v2.php?ItemID=", intNum + "");
+                        "selectItem_script_v2.php?ItemID=", intNum + "");
                 return s;
             }
         }
@@ -96,9 +113,6 @@ public class EditActivity extends AppCompatActivity {
             String itemCategory = c.getString("ItemCategory");
 
             etName.setText(itemName);
-
-            //Hard coding for test...
-            //etName.setText("Test Value!!!");
 
             //get index of spinner value
             int index = getIndex(sUnitType, itemUnitType);
@@ -130,124 +144,140 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void updateItem() {
-        final String name = etName.getText().toString();
-        final int amount = Integer.parseInt(etAmount.getText().toString());
-        final String description = etDescription.getText().toString();
-        final double price = Double.parseDouble(etPrice.getText().toString());
-        final String category = sCategory.getSelectedItem().toString();
-        final String unitType = sUnitType.getSelectedItem().toString();
+        final String name = etName.getText().toString().trim();
+        System.out.println("name = " + name);
+        final int amount = Integer.parseInt(etAmount.getText().toString().trim());
+        System.out.println("amount = " + amount);
+        final String description = etDescription.getText().toString().trim();
+        System.out.println("description = " + description);
+        final double price = Double.parseDouble(etPrice.getText().toString().trim());
+        System.out.println("price = " + price);
+        final String category = sCategory.getSelectedItem().toString().trim();
+        System.out.println("category = " + category);
+        final String unitType = sUnitType.getSelectedItem().toString().trim();
+        System.out.println("unitType = " + unitType);
 
-        class UpdateItem extends AsyncTask<Void, Void, String> {
-            ProgressDialog loading;
+        class UpdateItem extends AsyncTask<String, String, String> {
+            ProgressDialog progressDialog;
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                loading = ProgressDialog.show(EditActivity.this, "Updating...", "Wait...",
-                        false, false);
+                progressDialog = new ProgressDialog(EditActivity.this);
+                progressDialog.setMessage("Updating...");
+                progressDialog.setIndeterminate(false);
+                progressDialog.setCancelable(true);
+                progressDialog.show();
             }
 
             @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                loading.dismiss();
-                Toast.makeText(EditActivity.this, s, Toast.LENGTH_LONG).show();
+            protected String doInBackground(String... args) {
+
+                String responseMessage = "";
+                InputStream inputStream = null;
+
+                List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+                nameValuePairs.add(new BasicNameValuePair("ItemID", intNum + ""));
+                nameValuePairs.add(new BasicNameValuePair("ItemName", name));
+                nameValuePairs.add(new BasicNameValuePair("ItemUnitType", unitType));
+                nameValuePairs.add(new BasicNameValuePair("ItemDescription", description));
+                nameValuePairs.add(new BasicNameValuePair("ItemPrice", price + ""));
+                nameValuePairs.add(new BasicNameValuePair("ItemCount", amount + ""));
+                nameValuePairs.add(new BasicNameValuePair("ItemCategory", category));
+
+                JSONObject jsonObject = jsonParser.makeHttpRequest(
+                        SERVER_ADDRESS + "edit_script.php", "GET", nameValuePairs);
+
+                /*if (jsonObject == null) {
+                    System.out.println("Its null!!!!!!"); //This is happening 3/23 10:17pm
+                }
+
+                try {
+                    String success = jsonObject.getString("success");
+
+                    if (success.equalsIgnoreCase("1")) {
+                        Intent intent = getIntent();
+                        setResult(100, intent);
+                        finish();
+                    }
+                    else {
+                        //not sure what goes here
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+*/
+                return null;
+
+               /* try {
+                    HttpClient client = new DefaultHttpClient();
+                    HttpPost post = new HttpPost(SERVER_ADDRESS + "edit_script.php");
+                    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    HttpResponse response = client.execute(post);
+                    HttpEntity entity = response.getEntity();
+                    //inputStream = entity.getContent();
+
+                }
+                catch (ClientProtocolException e) {
+                    System.out.println("ClientProtocolException!");
+                    e.printStackTrace();
+                }
+                catch (IOException e) {
+                    System.out.println("IOException!");
+                    e.printStackTrace();
+                }
+                return "success";*/
+
+                /*try {
+                    BufferedReader bufferedReader = new BufferedReader(
+                            new InputStreamReader(inputStream, "iso-8859-1"), 8);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line = null;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line + "\n");
+                    }
+                    inputStream.close();
+                    responseMessage = stringBuilder.toString();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("(223)Response Message", responseMessage);
+                System.out.println("Test");
+                return responseMessage;*/
+
+                /*try {
+                    JSONArray jsonArray = new JSONArray(responseMessage);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    }
+
+
+                    int num = ()
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }*/
             }
-
             @Override
-            protected String doInBackground(Void... params) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                hashMap.put("ItemID", intNum + "");
-                hashMap.put("ItemName", name);
-                hashMap.put("ItemCount", amount + "");
-                hashMap.put("ItemDescription", description);
-                hashMap.put("ItemPrice", price + "");
-                hashMap.put("ItemCategory", category);
-                hashMap.put("ItemUnitType", unitType);
-
-                RequestHandler rh = new RequestHandler();
-                String s = rh.sendPostRequest(SERVER_ADDRESS + "edit_script.php", hashMap);
-
-                return s;
+            protected void onPostExecute(String result) {
+                progressDialog.dismiss();
             }
         }
+
+
         UpdateItem ui = new UpdateItem();
         ui.execute();
     }
 
-
-
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        displayItemDetails();
-    }*/
-
     public void onClickUpdateItem(View view) {
         updateItem();
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("UserID", userID);
         startActivity(intent);
     }
-
-    /*public void onClickUpdateItem(View view) {
-        //make a new intent, specifying the next activity to launch on button click.
-        Intent intent = new Intent(this, MainActivity.class);
-        //get the name EditText data and convert to string, then add to intent.
-
-        String name = etName.getText().toString();
-        int amount = Integer.parseInt(etAmount.getText().toString());
-        String description = etDescription.getText().toString();
-        double price = Double.parseDouble(etPrice.getText().toString());
-        String category = sCategory.getSelectedItem().toString();
-        String unitType = sUnitType.getSelectedItem().toString();
-
-
-//Temporary hardcode ItemID, "intNum" -> 2
-
-        ItemData item = new ItemData(2, name, unitType, description, price, amount, category);
-
-        submitItemChanges(item);
-
-        //intent.putExtra("name", name);
-        //get the category spinner data and convert to string...
-        //startActivity(intent);
-    }*/
-
-    /*private void submitItemChanges(ItemData item) {
-        ServerRequests serverRequests = new ServerRequests(this);
-        serverRequests.storeItemDataInBackground(item, new GetItemCallback() {
-            @Override
-            public void done(ItemData returnedItem) {
-                startActivity(new Intent(EditActivity.this, MainActivity.class));
-            }
-        });
-    }*/
-
-    private void displayItemDetails() {
-        //set the values in the EditText onStart....
-
-
-    }
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-//            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-//                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }*/
-
-
 }
