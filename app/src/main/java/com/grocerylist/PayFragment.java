@@ -54,10 +54,6 @@ public class PayFragment extends Fragment {
         b.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-
-                String title = getResources().getString(R.string.choose_title);
-
                 PackageManager pm = getActivity().getPackageManager();
                 Intent payIntent = pm.getLaunchIntentForPackage("com.google.android.apps.walletnfcrel");
 

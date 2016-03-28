@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Strings related to Login -->
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">GroceryFriend</string>
     <string name="login_string">Login</string>
     <string name="enter_user_name_string">Enter User Name</string>
     <string name="enter_password_string">Enter Password</string>

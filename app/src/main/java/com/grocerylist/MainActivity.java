@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        Bundle b = getIntent().getExtras();
-//        userID = b.getInt("UserID");
         Log.d("main activity:", userID+"");
 
         // TabView
