@@ -9,19 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
@@ -76,25 +72,6 @@ public class EditActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(String... params) {
 
-                /*runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        try {
-                            List<NameValuePair> params = new ArrayList<>();
-                            params.add(new BasicNameValuePair("ItemID", itemId + ""));
-                            JSONObject json = jsonParser.makeHttpRequest(SERVER_ADDRESS +
-                                    "selectItem_script_v2.php?ItemID=", "GET", params);
-                            Log.d("Single Product Details", json.toString());
-
-                            JSONArray itemObj = json.getJSONArray()
-                        }
-                        catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                });*/
                 Log.d("EditActivity itemId=", itemId + "");
                 String s = sendGetRequestParam(SERVER_ADDRESS +
                         "selectItem_script_v2.php?ItemID=", itemId + "");
@@ -208,9 +185,6 @@ public class EditActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(String... args) {
 
-                String responseMessage = "";
-                InputStream inputStream = null;
-
                 List<NameValuePair> nameValuePairs = new ArrayList<>();
 
                 nameValuePairs.add(new BasicNameValuePair("ItemID", itemId + ""));
@@ -221,89 +195,17 @@ public class EditActivity extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("ItemCount", amount + ""));
                 nameValuePairs.add(new BasicNameValuePair("ItemCategory", category));
 
-                JSONObject jsonObject = jsonParser.makeHttpRequest(
+                jsonParser.makeHttpRequest(
                         SERVER_ADDRESS + "edit_script.php", "GET", nameValuePairs);
 
-                /*if (jsonObject == null) {
-                    System.out.println("Its null!!!!!!"); //This is happening 3/23 10:17pm
-                }
-
-                try {
-                    String success = jsonObject.getString("success");
-
-                    if (success.equalsIgnoreCase("1")) {
-                        Intent intent = getIntent();
-                        setResult(100, intent);
-                        finish();
-                    }
-                    else {
-                        //not sure what goes here
-                    }
-                }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-*/
                 return null;
 
-               /* try {
-                    HttpClient client = new DefaultHttpClient();
-                    HttpPost post = new HttpPost(SERVER_ADDRESS + "edit_script.php");
-                    post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    HttpResponse response = client.execute(post);
-                    HttpEntity entity = response.getEntity();
-                    //inputStream = entity.getContent();
-
-                }
-                catch (ClientProtocolException e) {
-                    System.out.println("ClientProtocolException!");
-                    e.printStackTrace();
-                }
-                catch (IOException e) {
-                    System.out.println("IOException!");
-                    e.printStackTrace();
-                }
-                return "success";*/
-
-                /*try {
-                    BufferedReader bufferedReader = new BufferedReader(
-                            new InputStreamReader(inputStream, "iso-8859-1"), 8);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    String line = null;
-                    while ((line = bufferedReader.readLine()) != null) {
-                        stringBuilder.append(line + "\n");
-                    }
-                    inputStream.close();
-                    responseMessage = stringBuilder.toString();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                Log.d("(223)Response Message", responseMessage);
-                System.out.println("Test");
-                return responseMessage;*/
-
-                /*try {
-                    JSONArray jsonArray = new JSONArray(responseMessage);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    }
-
-
-                    int num = ()
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }*/
             }
             @Override
             protected void onPostExecute(String result) {
                 progressDialog.dismiss();
             }
         }
-
 
         UpdateItem ui = new UpdateItem();
         ui.execute();

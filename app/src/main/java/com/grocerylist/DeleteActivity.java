@@ -7,13 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
@@ -30,11 +25,10 @@ public class DeleteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
-
         Intent intent = getIntent();
+
         itemId = intent.getIntExtra("ItemID", -88);
         userID = intent.getIntExtra("UserID", -98);
-
     }
 
     public void onClickDelete(View view) {
@@ -48,6 +42,7 @@ public class DeleteActivity extends AppCompatActivity {
     private void deleteItem(final int idOfDeletedItem) {
 
         class DeleteItem extends AsyncTask<String, String, String> {
+
             ProgressDialog progressDialog;
 
             @Override
@@ -66,9 +61,7 @@ public class DeleteActivity extends AppCompatActivity {
                 Log.d("DelActivity itemId", itemId + "");
                 params.add(new BasicNameValuePair("ItemID", itemId + ""));
                 params.add(new BasicNameValuePair("UserID", userID + ""));
-
                 jsonParser.makeHttpRequest(SERVER_ADDRESS, "GET", params);
-
                 return null;
             }
 
@@ -76,8 +69,6 @@ public class DeleteActivity extends AppCompatActivity {
             protected void onPostExecute(String s) {
                 progressDialog.dismiss();
             }
-
-
         }
         DeleteItem deleteItem = new DeleteItem();
         deleteItem.execute();
