@@ -38,9 +38,9 @@ public class DeleteActivity extends AppCompatActivity {
     }
 
     public void onClickDelete(View view) {
+        deleteItem(itemId);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("UserID", userID);
-        deleteItem(itemId);
         Log.d("DelAct", "Returning to MainActivity");
         startActivity(intent);
     }
@@ -65,6 +65,7 @@ public class DeleteActivity extends AppCompatActivity {
                 List<NameValuePair> params = new ArrayList<>();
                 Log.d("DelActivity itemId", itemId + "");
                 params.add(new BasicNameValuePair("ItemID", itemId + ""));
+                params.add(new BasicNameValuePair("UserID", userID + ""));
 
                 jsonParser.makeHttpRequest(SERVER_ADDRESS, "GET", params);
 

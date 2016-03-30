@@ -32,13 +32,13 @@
     <!-- Price Label -->
     <TextView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ItemID"
+        android:text="Item to Add:"
         android:id="@+id/itemText"
         android:layout_below="@id/editUserID"
         android:textSize="17dip"/>
 
-    <!-- Input Price -->
-    <EditText android:id="@+id/editItemID"
+    <!-- Choose Item -->
+       <EditText android:id="@+id/editItemID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/itemText"
