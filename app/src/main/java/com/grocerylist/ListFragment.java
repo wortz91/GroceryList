@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -69,6 +70,8 @@ public class ListFragment extends Fragment {
 
     boolean swiped = false;
 
+    ArrayList<HashMap<String, Integer>> list_data = new ArrayList<HashMap<String, Integer>>();
+
 //    Bundle bundle;
 //    Fragment fragment;
 
@@ -99,12 +102,13 @@ public class ListFragment extends Fragment {
         Log.d("UserID after Pass", userID + "");
         listView = (ListView) rootView.findViewById(R.id.list);
         listView.setOnTouchListener(swipeDetector);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(swipeDetector.swipeDetected()){
+                if (swipeDetector.swipeDetected()) {
                     Log.d("Detected a swipe: ", "onItemClick");
-                    if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
                         Log.d("OnClickItem was Swiped", "Oh YEAH!");
 
                         List<String> passedList = swipeDetectedAction(itemsArray, position);
@@ -117,8 +121,12 @@ public class ListFragment extends Fragment {
                         frag.setArguments(args);
                     }
                 } else {
+                    Log.d("click EditActivity:", itemID + "");
+                    Log.d("position:", position + "");
+                    Integer itemIdentification = list_data.get(position).get("item_id");
+                    int itemStuff = itemIdentification;
                     Intent intent = new Intent(getContext(), EditActivity.class);
-                    intent.putExtra("ItemID", itemID);
+                    intent.putExtra("ItemID", itemStuff);
                     intent.putExtra("UserID", userID);
                     startActivity(intent);
                 }
@@ -128,14 +136,16 @@ public class ListFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                if(swipeDetector.swipeDetected()){
+                if (swipeDetector.swipeDetected()) {
                     Log.d("Detected a swipe: ", "onItemLongClick");
-                    if(swipeDetector.getAction() == SwipeDetector.Action.LR) {
+                    if (swipeDetector.getAction() == SwipeDetector.Action.LR) {
                         Log.d("LongClickItem Swiped", "Oh YEAH!");
                     }
                 } else {
                     Intent intent = new Intent(getContext(), DeleteActivity.class);
-                    intent.putExtra("ItemID", itemID);
+                    Integer itemIdentification = list_data.get(position).get("item_id");
+                    int itemStuff = itemIdentification;
+                    intent.putExtra("ItemID", itemStuff);
                     intent.putExtra("UserID", userID);
                     startActivity(intent);
                     // Return true to consume the click event. In this case the
@@ -175,6 +185,10 @@ public class ListFragment extends Fragment {
                 item.setItemCategory(jo.optString("ItemCategory"));
 
                 Log.d("JSONObject:", jo.toString());
+                HashMap<String, Integer> itemIdMap = new HashMap<>();
+                itemIdMap.put("item_id", item.getItemID());
+
+                list_data.add(itemIdMap);
                 itemsArray.add(item.toItemName());
                 itemID = item.getItemID();
 //
@@ -229,7 +243,11 @@ public class ListFragment extends Fragment {
 
             while ((line = r.readLine()) != null) {
                 total.append(line);
+                Log.d("Total:", total.toString());
             }
+
+            Log.d("completed total:", total.toString());
+
 
             Log.v(TAG, "rest data" + total.toString());
 
