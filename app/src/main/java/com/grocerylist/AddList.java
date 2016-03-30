@@ -28,6 +28,8 @@ public class AddList extends AppCompatActivity {
     EditText inputUserID;
     EditText inputItemID;
 
+    private int userID;
+
     private static String url_create_user_item = "http://w16groc.franklinpracticum.com/InsertUserItems.php";
     private static final String TAG_SUCCESS = "success";
 

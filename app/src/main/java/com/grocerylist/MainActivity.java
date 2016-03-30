@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action 2", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Intent addToDatabase = new Intent(getApplicationContext(), AddList.class);
-                addToDatabase.putExtra("UserID", userID);
                 startActivity(addToDatabase);
             }
         });
