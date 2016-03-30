@@ -15,12 +15,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class LoginActivity extends AppCompatActivity implements TextView.OnEditorActionListener,
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+
+public class LoginActivity extends AppCompatActivity implements
         View.OnClickListener{
 
 
@@ -66,9 +74,9 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
         registrationSuccessfulTextView.setVisibility(View.GONE);
         loginRegisterButton2.setVisibility(View.GONE);
 
-        loginUserNameEditText.setOnEditorActionListener(this);
-        loginPasswordEditText.setOnEditorActionListener(this);
-        reenterPasswordEditText.setOnEditorActionListener(this);
+        //loginUserNameEditText.setOnEditorActionListener(this);
+        //loginPasswordEditText.setOnEditorActionListener(this);
+        //reenterPasswordEditText.setOnEditorActionListener(this);
         loginButton.setOnClickListener(this);
         loginRegisterButton.setOnClickListener(this);
         loginRegisterButton2.setOnClickListener(this);
@@ -76,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
 
     }
 
-    @Override
+/**    @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
         if (actionId == EditorInfo.IME_ACTION_DONE ||
@@ -94,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
             }
         }
         return false;
-    }
+    }**/
 
     @Override
     public void onClick(View v) {
@@ -104,23 +112,68 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 registrationSuccessfulTextView.setVisibility(View.GONE);
 
                 //send to database
+                String TAG = "GroceryList";
                 StringBuilder sb = new StringBuilder();
+                JSONObject jo = new JSONObject();
+
+                try {
+
+                    jo.put("UserName", loginUserNameEditText.getText());
+                    jo.put("Password", loginPasswordEditText.getText());
+                }
+                catch(JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("json exception");
+                }
+
 
                 try {
                     URL url = new URL("http://w16groc.franklinpracticum.com/login_script.php?" +
-                            "UserName=%27" + loginUserNameString +
-                            "%27&Password=%27" + loginPasswordString  + "%27");
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                     "UserName=%27" + loginUserNameEditText.getText() +
+                     "%27&Password=%27" + loginPasswordEditText.getText()  + "%27");
+                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                   /** URL url = new URL("http://w16groc.franklinpracticum.com/login_script.php?");
+                    con = (HttpURLConnection) url.openConnection();
+                    System.out.println("connection open");
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    System.out.println("bufferReader created");
+
+                    con.setDoOutput(true);
+                    System.out.println("DoOutput set");
+                    con.setRequestProperty("Accept", "application/json");
+                    System.out.println("request p 1");
+
+                    con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    System.out.println("request p 2");
+                    con.setRequestMethod("POST");
+                    System.out.println("post");
+
+                    OutputStream os = con.getOutputStream();
+                    System.out.println("outputstream created");
+                    os.write(jo.toString().getBytes("UTF-8"));
+                    System.out.println("os written to");
+                    os.close();**/
+
 
                     String s;
-                    while((s=bufferedReader.readLine())!=null){
-                        sb.append(s+"\n");
+                    while ((s = bufferedReader.readLine()) != null) {
+                        sb.append(s + "\n");
                     }
+                    System.out.println("bufferReader sb appended");
                 }
                 catch(Exception e){
                     e.printStackTrace();
+                    System.out.println("connection exception");
                 }
+                /**finally
+                {
+                    con.disconnect();
+                }**/
+
+
+
 
                 int userId = 0;
                 try {
@@ -165,6 +218,18 @@ public class LoginActivity extends AppCompatActivity implements TextView.OnEdito
                 break;
 
             case R.id.loginRegisterButton2:
+                JSONObject joReg = new JSONObject();
+                Boolean valid = false;
+                try {
+                    joReg.put("ItemName", loginUserNameEditText.getText());
+                    joReg.put("ItemUnitType", loginPasswordEditText.getText());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                }
+                System.out.println(joReg.toString());
+                HttpClient httpClient = HttpClientBuilder.create().build();
 
                 if (loginUserNameString.equalsIgnoreCase("a") &&
                         loginPasswordString.equalsIgnoreCase("1") &&

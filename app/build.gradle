@@ -36,4 +36,5 @@ dependencies {
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     compile group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
     compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.mcxiaoke.volley:library:1.0.18'
 }

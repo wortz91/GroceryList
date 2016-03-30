@@ -2,13 +2,15 @@
 <resources>
     <!--<strings related to addActivity-->
     <string name="input_item_name_string">Input Item Name</string>
-    <string name="input_size_weight_string">Input Size / Weight (Optional)</string>
-    <string name="input_brand_string">Input Brand (Optional)</string>
+    <string name="input_unit_type_string">Input Item Unit Type (Optional)</string>
+    <string name="input_description_string">Input Item Description (Optional)</string>
     <string name="add_string">Add</string>
     <string name="cancel_string">Cancel</string>
     <string name="select_a_category_string">Select a Category:</string>
     <string name="add_success_string">Item was added to the database.</string>
     <string name="add_fail_string">Item was not added to the database.</string>
+    <string name="input_item_price_string">Input Item Price (Optional)</string>
+    <string name="input_item_quantity_string">Input Item Quantity (Optional)</string>
     <!--Category String Array -->
     <string-array name="category_array">
         <item>Produce</item>

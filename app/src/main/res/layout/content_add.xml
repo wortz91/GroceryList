@@ -20,64 +20,6 @@
         android:id="@+id/addTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/selectCategorySpinner"
-        android:layout_below="@+id/selectCategoryTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputItemNameEditText"
-        android:hint="@string/input_item_name_string"
-        android:textSize="20sp"
-        android:layout_below="@+id/selectCategorySpinner"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:editable="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputSizeWeightEditText"
-        android:textSize="20sp"
-        android:hint="@string/input_size_weight_string"
-        android:layout_below="@+id/inputItemNameEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputBrandEditText"
-        android:textSize="20sp"
-        android:hint="@string/input_brand_string"
-        android:layout_below="@+id/inputSizeWeightEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_string"
-        android:id="@+id/addButton"
-        android:layout_below="@+id/inputBrandEditText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel_string"
-        android:id="@+id/cancelButton"
-        android:layout_below="@id/inputBrandEditText"
-        android:layout_alignRight="@+id/inputBrandEditText"
-        android:layout_alignEnd="@+id/inputBrandEditText"
-        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -93,8 +35,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_success_string"
-        android:id="@+id/addSuccessTextView"
+        android:text="@string/add_fail_string"
+        android:id="@+id/addFailTextView"
         android:layout_below="@+id/addTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -102,21 +44,103 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_fail_string"
-        android:id="@+id/addFailTextView"
+        android:text="@string/add_success_string"
+        android:id="@+id/addSuccessTextView"
         android:layout_below="@+id/addTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectCategorySpinner"
+        android:layout_below="@+id/selectCategoryTextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputNameEditText"
+        android:hint="@string/input_item_name_string"
+        android:textSize="20sp"
+        android:layout_below="@+id/selectCategorySpinner"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:editable="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputUnitTypeEditText"
+        android:textSize="20sp"
+        android:hint="@string/input_unit_type_string"
+        android:layout_below="@+id/inputNameEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/inputQuantityEditText"
+        android:textSize="20sp"
+        android:hint="@string/input_item_quantity_string"
+        android:layout_below="@+id/inputUnitTypeEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/inputPriceEditText"
+        android:textSize="20sp"
+        android:hint="@string/input_item_price_string"
+        android:layout_below="@+id/inputQuantityEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/inputDescriptionEditText"
+        android:textSize="20sp"
+        android:hint="@string/input_description_string"
+        android:layout_below="@+id/inputPriceEditText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_string"
+        android:id="@+id/addButton"
+        android:layout_below="@+id/inputDescriptionEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_string"
+        android:id="@+id/cancelButton"
+        android:layout_below="@id/inputDescriptionEditText"
+        android:layout_alignRight="@+id/inputDescriptionEditText"
+        android:layout_alignEnd="@+id/inputDescriptionEditText"
+        android:textSize="20sp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Another Item"
         android:id="@+id/addAnotherItemButton"
-        android:layout_below="@+id/inputBrandEditText"
+        android:layout_below="@+id/inputDescriptionEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="20sp"/>
-
 
 </RelativeLayout>
